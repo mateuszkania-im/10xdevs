@@ -1,0 +1,175 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { ChevronLeftIcon, Edit, Calendar, Users, MapPin, ArrowRightLeft, Compass, DollarSign, Tag } from "lucide-react";
+import { getNoteById } from "@/lib/services/note.service";
+import { getProjectById } from "@/lib/services/project.service";
+import { formatDate } from "@/lib/utils";
+
+const { projectId, noteId } = Astro.params;
+
+if (!projectId || !noteId) {
+  return Astro.redirect("/projects");
+}
+
+const notePromise = getNoteById(projectId, noteId);
+const projectPromise = getProjectById(projectId);
+const [note, project] = await Promise.all([notePromise, projectPromise]);
+
+if (!note || !project) {
+  return Astro.redirect(`/projects/${projectId}/notes`);
+}
+
+const title = note.is_config_note 
+  ? `Notatka konfiguracyjna - ${project.name}` 
+  : `${note.title} - ${project.name}`;
+
+const isConfigNote = note.is_config_note;
+const configData = note.config_data;
+---
+
+<MainLayout title={title}>
+  <div class="container mx-auto py-6">
+    <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center gap-4">
+        <a href={`/projects/${projectId}/notes`} class="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+          <ChevronLeftIcon className="h-4 w-4" />
+          <span>Powrót</span>
+        </a>
+        <h1 class="text-3xl font-bold">{note.title}</h1>
+      </div>
+
+      <a href={`/projects/${projectId}/notes/${noteId}/edit`} class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+        <Edit className="h-4 w-4" />
+        <span>Edytuj</span>
+      </a>
+    </div>
+
+    <!-- Karta notatki -->
+    <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div class="p-6">
+        <!-- Znacznik dla notatki konfiguracyjnej -->
+        {isConfigNote && (
+          <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 mb-4">
+            Notatka konfiguracyjna
+          </div>
+        )}
+
+        <!-- Tagi -->
+        {note.tags && note.tags.length > 0 && (
+          <div class="flex flex-wrap gap-1 mb-4">
+            {note.tags.map((tag) => (
+              <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">
+                {tag}
+              </div>
+            ))}
+          </div>
+        )}
+
+        <!-- Treść notatki -->
+        <div class="prose prose-sm dark:prose-invert max-w-none">
+          {note.content ? (
+            <div set:html={note.content} />
+          ) : (
+            <p class="text-muted-foreground italic">Brak treści</p>
+          )}
+        </div>
+
+        <!-- Szczegóły konfiguracyjne -->
+        {isConfigNote && configData && (
+          <div class="space-y-4 mt-6">
+            <div class="bg-primary/10 p-4 rounded-md">
+              <h3 class="text-lg font-medium mb-2">Szczegóły podróży</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {configData.destination && (
+                  <div class="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Cel: </span>
+                    <span class="text-sm">{configData.destination}</span>
+                  </div>
+                )}
+                
+                {configData.travel_style && (
+                  <div class="flex items-center gap-2">
+                    <Compass className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Styl: </span>
+                    <span class="text-sm">{configData.travel_style}</span>
+                  </div>
+                )}
+
+                {(configData.arrival_date || configData.departure_date) && (
+                  <div class="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Termin: </span>
+                    <span class="text-sm">
+                      {configData.arrival_date && formatDate(configData.arrival_date)}
+                      {configData.arrival_date && configData.departure_date && " - "}
+                      {configData.departure_date && formatDate(configData.departure_date)}
+                    </span>
+                  </div>
+                )}
+
+                {configData.num_days > 0 && (
+                  <div class="flex items-center gap-2">
+                    <ArrowRightLeft className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Długość: </span>
+                    <span class="text-sm">{configData.num_days} {configData.num_days === 1 ? "dzień" : "dni"}</span>
+                  </div>
+                )}
+
+                {configData.num_people > 0 && (
+                  <div class="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Liczba osób: </span>
+                    <span class="text-sm">{configData.num_people}</span>
+                  </div>
+                )}
+
+                {configData.budget && (
+                  <div class="flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Budżet: </span>
+                    <span class="text-sm">{configData.budget}</span>
+                  </div>
+                )}
+              </div>
+
+              {configData.accommodation_address && (
+                <div class="mt-3">
+                  <div class="flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Zakwaterowanie: </span>
+                    <span class="text-sm">{configData.accommodation_address}</span>
+                  </div>
+                </div>
+              )}
+
+              {configData.interests && configData.interests.length > 0 && (
+                <div class="mt-3">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <Tag className="h-4 w-4 text-primary" />
+                    <span class="text-sm font-medium">Zainteresowania: </span>
+                    <div class="flex flex-wrap gap-1 mt-1">
+                      {configData.interests.map((interest) => (
+                        <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground">
+                          {interest}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <!-- Data utworzenia i modyfikacji -->
+        <div class="mt-8 pt-4 border-t text-xs text-muted-foreground">
+          <div>Utworzono: {note.created_at ? formatDate(note.created_at) : "b/d"}</div>
+          {note.updated_at && note.updated_at !== note.created_at && (
+            <div>Ostatnio zmodyfikowano: {formatDate(note.updated_at)}</div>
+          )}
+        </div>
+      </div>
+    </div>
+  </div>
+</MainLayout> 

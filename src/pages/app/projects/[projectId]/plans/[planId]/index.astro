@@ -1,0 +1,19 @@
+---
+import AppShell from "@/layouts/AppShell.astro";
+import { PlanDetailPageIsland } from "@/components/plans/PlanDetailPageIsland.tsx";
+
+// Pobieranie parametrów z URL
+const { projectId, planId } = Astro.params;
+
+// Redirect jeśli brak wymaganych parametrów
+if (!projectId || !planId) {
+  return Astro.redirect('/404');
+}
+
+// Wyłączenie prerenderowania - strona dynamiczna
+export const prerender = false;
+---
+
+<AppShell activeProjectId={projectId}>
+  <PlanDetailPageIsland client:load projectId={projectId} planId={planId} />
+</AppShell> 

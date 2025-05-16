@@ -1,8 +1,8 @@
-# Dokument wymagań produktu (PRD) - VibeTravels
+# Dokument wymagań produktu (PRD) - City Hooper
 
 ## 1. Przegląd produktu
 
-VibeTravels to aplikacja mobilna i webowa, której głównym celem jest ułatwienie planowania angażujących i ciekawych wycieczek. Wykorzystując możliwości sztucznej inteligencji, aplikacja pozwala użytkownikom na przekształcanie prostych notatek o miejscach i celach podróży w szczegółowe plany podróży.
+City Hooper to aplikacja mobilna i webowa, której głównym celem jest ułatwienie planowania angażujących i ciekawych wycieczek. Wykorzystując możliwości sztucznej inteligencji, aplikacja pozwala użytkownikom na przekształcanie prostych notatek o miejscach i celach podróży w szczegółowe plany podróży.
 
 Główne funkcje aplikacji obejmują:
 
@@ -23,7 +23,7 @@ Planowanie angażujących i interesujących wycieczek jest trudne i czasochłonn
 - Niepewność co do tego, jak optymalnie zaplanować czas podczas wycieczki
 - Trudności w uwzględnieniu wszystkich istotnych szczegółów podczas planowania
 
-VibeTravels rozwiązuje te problemy poprzez:
+City Hooper rozwiązuje te problemy poprzez:
 
 - Dostarczenie intuicyjnego narzędzia do organizowania notatek związanych z podróżą
 - Wykorzystanie sztucznej inteligencji do przekształcania zebranych notatek w szczegółowe, spersonalizowane plany podróży
@@ -339,3 +339,48 @@ Sukces MVP będzie mierzony na podstawie następujących wskaźników:
    - Średni czas generowania planu poniżej 15 sekund
    - Wskaźnik błędów podczas generowania planów poniżej 5%
    - Dostępność aplikacji na poziomie 99,5%
+
+## 7. Strategia testowania
+
+### 7.1 Testy End-to-End (E2E)
+
+Dla zapewnienia jakości aplikacji City Hooper, zaimplementowano strategię testów end-to-end wykorzystując framework Playwright. Testy te symulują rzeczywiste zachowania użytkownika i weryfikują, czy kluczowe przepływy działają poprawnie.
+
+#### 7.1.1 Obecne pokrycie testami
+
+##### Testy uwierzytelniania
+
+- **auth-login.spec.ts**: Weryfikuje proces logowania użytkownika
+  - Otwiera stronę główną
+  - Klika przycisk logowania
+  - Wypełnia formularz danymi testowymi (pies@pies.pl / piespies)
+  - Sprawdza poprawne przekierowanie do strony z projektami
+  - Waliduje widoczność nagłówka "Twoje projekty"
+
+##### Testy zarządzania notatkami
+
+- **note-add.spec.ts**: Weryfikuje proces dodawania notatki do projektu
+  - Zawiera pełny przepływ od logowania
+  - Wejście do pierwszego projektu
+  - Dodanie nowej notatki z tytułem i treścią
+  - Sprawdzenie czy notatka została poprawnie dodana i jest widoczna
+
+#### 7.1.2 Planowane rozszerzenia testów
+
+W przyszłych iteracjach planowane jest rozszerzenie zestawu testów o:
+
+- Testy tworzenia nowego projektu
+- Testy generowania planu podróży
+- Testy eksportu planu do PDF
+- Testy edycji i usuwania notatek
+- Testy porównywania różnych wersji planów
+
+### 7.2 Uruchamianie testów
+
+Testy E2E można uruchomić przy użyciu komendy:
+
+```
+npx playwright test
+```
+
+Testy są również zintegrowane z CI/CD i uruchamiane automatycznie podczas procesu wdrażania, aby zapewnić stabilność aplikacji.

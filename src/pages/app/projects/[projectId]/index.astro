@@ -1,0 +1,19 @@
+---
+import AppShell from "@/layouts/AppShell.astro";
+import { ProjectViewIsland } from "@/components/projects/ProjectViewIsland.tsx";
+
+// Pobieranie parametru projectId z URL
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect('/404');
+}
+
+// Wyłączenie prerenderowania - strona dynamiczna
+export const prerender = false;
+---
+
+<AppShell activeProjectId={projectId}>
+  <!-- Używam client:load zamiast client:visible, aby korzystać z tego samego hydratowanego kontenera z PortalRoot -->
+  <ProjectViewIsland client:load projectId={projectId} />
+</AppShell> 

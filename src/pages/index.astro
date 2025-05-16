@@ -1,8 +1,23 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
+import LayoutPublic from "../layouts/LayoutPublic.astro";
+import NavbarPublic from "../components/NavbarPublic.astro";
+import HeroSection from "../components/HeroSection.astro";
+import FeatureGrid from "../components/FeatureGrid.astro";
+import HowItWorks from "../components/HowItWorks.astro";
+import Footer from "../components/Footer.astro";
+import AuthModalIsland from "../components/AuthModalIsland";
+import { ToastProvider } from "../components/ToastProvider";
 ---
 
-<Layout>
-  <Welcome />
-</Layout>
+<LayoutPublic title="City Hooper - Twórz spersonalizowane plany podróży z AI">
+  <ToastProvider client:load>
+    <AuthModalIsland client:only="react" />
+    <NavbarPublic />
+    <main>
+      <HeroSection />
+      <FeatureGrid />
+      <HowItWorks />
+    </main>
+    <Footer />
+  </ToastProvider>
+</LayoutPublic>

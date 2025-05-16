@@ -1,0 +1,81 @@
+---
+// Zgodnie z planem implementacji, komponenty potrzebują typów i propsy
+import type { ReactNode } from 'react';
+
+// Definicja typu Feature
+interface Feature {
+  icon: string; // Zmiana na string z SVG path zamiast ReactNode dla komponentu Astro
+  title: string;
+  description: string;
+}
+
+interface Props {
+  features?: Feature[];
+}
+
+// Domyślne funkcjonalności
+const defaultFeatures: Feature[] = [
+  {
+    icon: '<path d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-16a1 1 0 0 0-1 1v4a1 1 0 0 0 .4.8l3 2.2a1 1 0 0 0 1.2-1.6L13 10.25V7a1 1 0 0 0-1-1z" />',
+    title: 'Szybkie planowanie',
+    description: 'Zamień chaotyczne notatki w dokładny plan podróży w kilka sekund dzięki zaawansowanym algorytmom AI.'
+  },
+  {
+    icon: '<path d="M8 4H6a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2" /><rect x="8" y="2" width="8" height="4" rx="1" ry="1" /><path d="M10.42 12.61a2.1 2.1 0 1 1 2.97 2.97L9 20l-4 1 1-4 4.42-4.39z" />',
+    title: 'Personalizowane plany',
+    description: 'System dopasuje plan do Twoich preferencji, uwzględniając czas na lokalną kuchnię, zabytki czy odpoczynek.'
+  },
+  {
+    icon: '<circle cx="12" cy="12" r="3" /><path d="M3 7V5a2 2 0 0 1 2-2h2" /><path d="M17 3h2a2 2 0 0 1 2 2v2" /><path d="M21 17v2a2 2 0 0 1-2 2h-2" /><path d="M7 21H5a2 2 0 0 1-2-2v-2" /><line x1="12" y1="8" x2="12" y2="1" /><line x1="19" y1="12" x2="22" y2="12" /><line x1="12" y1="16" x2="12" y2="22" /><line x1="5" y1="12" x2="2" y2="12" />',
+    title: 'Optymalizacja trasy',
+    description: 'Inteligentnie uporządkowane miejsca do odwiedzenia, minimalizujące czas spędzony na przemieszczaniu się.'
+  },
+  {
+    icon: '<path d="M22 12h-4l-3 9L9 3l-3 9H2" />',
+    title: 'Rekomendacje lokalne',
+    description: 'Sugestie niedalekich, dobrze ocenianych miejscówek, które zazwyczaj nie trafiają do standardowych przewodników.'
+  }
+];
+
+// Pobranie funkcjonalności z propsów lub użycie domyślnych
+const { features = defaultFeatures } = Astro.props;
+---
+
+<section id="funkcje" class="bg-muted py-24">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="flex flex-col items-center justify-center space-y-4 text-center">
+      <div class="space-y-2">
+        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Kluczowe funkcje</h2>
+        <p class="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
+          City Hooper pomoże Ci stworzyć idealny plan podróży, który odzwierciedla Twoje preferencje i zainteresowania.
+        </p>
+      </div>
+    </div>
+    
+    <div class="mx-auto grid max-w-5xl grid-cols-1 gap-6 pt-12 md:grid-cols-2 md:gap-8">
+      {features.map(feature => (
+        <div class="flex flex-col items-start gap-4 rounded-lg border bg-background p-6 shadow transition-all hover:shadow-lg">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              stroke-width="2" 
+              stroke-linecap="round" 
+              stroke-linejoin="round" 
+              class="h-6 w-6 text-primary">
+                <Fragment set:html={feature.icon} />
+            </svg>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-xl font-bold">{feature.title}</h3>
+            <p class="text-muted-foreground">{feature.description}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section> 

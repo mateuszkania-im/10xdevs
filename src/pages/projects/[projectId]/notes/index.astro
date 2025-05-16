@@ -1,0 +1,49 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { NoteList } from "@/components/notes/NoteList";
+import { QueryProvider } from "@/components/providers/QueryProvider";
+import { Button } from "@/components/ui/button";
+import { PlusIcon } from "@/components/ui/icons";
+import { getProjectById } from "@/lib/services/project.service";
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect("/projects");
+}
+
+const project = await getProjectById(projectId);
+
+if (!project) {
+  return Astro.redirect("/projects");
+}
+---
+
+<MainLayout title={`Notatki - ${project.name}`}>
+  <div class="container mx-auto py-6">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">{project.name} - Notatki</h1>
+      <div class="flex gap-2">
+        <a href={`/projects/${projectId}/notes/new`} class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+          <PlusIcon className="w-4 h-4" />
+          <span>Nowa notatka</span>
+        </a>
+        {!project.has_config_note && (
+          <a href={`/projects/${projectId}/notes/config`} class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground">
+            <span>Dodaj notatkę konfiguracyjną</span>
+          </a>
+        )}
+      </div>
+    </div>
+
+    <div class="flex justify-end mb-4">
+      <a href={`/projects/${projectId}/notes/reorder`} class="inline-flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground">
+        <span>Zmień kolejność notatek</span>
+      </a>
+    </div>
+
+    <QueryProvider client:load>
+      <NoteList projectId={projectId} />
+    </QueryProvider>
+  </div>
+</MainLayout> 

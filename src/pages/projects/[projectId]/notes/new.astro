@@ -1,0 +1,35 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { NoteForm } from "@/components/notes/NoteForm";
+import { ChevronLeftIcon } from "lucide-react";
+import { getProjectById } from "@/lib/services/project.service";
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect("/projects");
+}
+
+const project = await getProjectById(projectId);
+
+if (!project) {
+  return Astro.redirect("/projects");
+}
+---
+
+<MainLayout title={`Nowa notatka - ${project.name}`}>
+  <div class="container mx-auto py-6">
+    <div class="mb-6">
+      <a href={`/projects/${projectId}/notes`} class="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+        <ChevronLeftIcon class="h-4 w-4" />
+        <span>Powrót do notatek</span>
+      </a>
+      <h1 class="text-3xl font-bold mt-2">Nowa notatka</h1>
+      <p class="text-muted-foreground">Utwórz nową notatkę w projekcie {project.name}</p>
+    </div>
+
+    <div class="max-w-2xl">
+      <NoteForm client:load projectId={projectId} />
+    </div>
+  </div>
+</MainLayout> 

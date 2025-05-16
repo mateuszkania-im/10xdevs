@@ -1,0 +1,42 @@
+---
+// Strona callback dla OAuth
+import { supabase } from '../../lib/supabase';
+
+// Pobierz kod z URL
+const code = Astro.url.searchParams.get('code');
+const next = Astro.url.searchParams.get('next') || '/';
+
+let error = null;
+
+// Jeśli kod istnieje, wymień go na sesję
+if (code) {
+  const response = await supabase.auth.exchangeCodeForSession(code);
+  if (response.error) {
+    error = response.error.message;
+  } else {
+    return Astro.redirect(next);
+  }
+}
+---
+
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Autoryzacja...</title>
+  </head>
+  <body>
+    {error ? (
+      <div>
+        <h1>Wystąpił błąd</h1>
+        <p>{error}</p>
+        <a href="/">Wróć do strony głównej</a>
+      </div>
+    ) : (
+      <div>
+        <h1>Przetwarzanie logowania...</h1>
+        <p>Jeśli nie zostaniesz przekierowany, <a href="/">kliknij tutaj</a>.</p>
+      </div>
+    )}
+  </body>
+</html>

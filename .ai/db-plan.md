@@ -1,4 +1,4 @@
-# Schemat bazy danych PostgreSQL dla VibeTravels
+# Schemat bazy danych PostgreSQL dla City Hooper
 
 ## 1. Lista tabel z kolumnami, typami danych i ograniczeniami
 

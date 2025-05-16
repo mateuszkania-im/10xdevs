@@ -1,0 +1,49 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { NoteForm } from "@/components/notes/NoteForm";
+import { ChevronLeftIcon } from "lucide-react";
+import { getProjectById } from "@/lib/services/project.service";
+import { getConfigNote } from "@/lib/services/note.service";
+
+const { projectId } = Astro.params;
+
+if (!projectId) {
+  return Astro.redirect("/projects");
+}
+
+const [project, configNote] = await Promise.all([
+  getProjectById(projectId),
+  getConfigNote(projectId)
+]);
+
+if (!project) {
+  return Astro.redirect("/projects");
+}
+
+const title = configNote 
+  ? `Edycja notatki konfiguracyjnej - ${project.name}`
+  : `Nowa notatka konfiguracyjna - ${project.name}`;
+
+const noteId = configNote?.id;
+---
+
+<MainLayout title={title}>
+  <div class="container mx-auto py-6">
+    <div class="mb-6">
+      <a href={`/projects/${projectId}/notes`} class="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+        <ChevronLeftIcon className="h-4 w-4" />
+        <span>Powrót do notatek</span>
+      </a>
+      <h1 class="text-3xl font-bold mt-2">{configNote ? "Edycja notatki konfiguracyjnej" : "Nowa notatka konfiguracyjna"}</h1>
+      <p class="text-muted-foreground">
+        {configNote 
+          ? "Zaktualizuj ustawienia podróży dla tego projektu" 
+          : "Utwórz notatkę konfiguracyjną z ustawieniami podróży dla tego projektu"}
+      </p>
+    </div>
+
+    <div class="max-w-2xl">
+      <NoteForm client:load projectId={projectId} noteId={noteId} isConfigNote={true} />
+    </div>
+  </div>
+</MainLayout> 

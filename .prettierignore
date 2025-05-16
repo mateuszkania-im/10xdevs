@@ -1,0 +1,7 @@
+# Ignoruj wszystkie pliki Astro
+*.astro
+
+# Inne pliki, które mogą powodować problemy
+node_modules
+.astro
+dist 

@@ -28,6 +28,10 @@ export interface Database {
           note_id: string;
           num_days: number;
           num_people: number;
+          destination?: string;
+          travel_style?: string;
+          budget?: string;
+          interests?: string[];
         };
         Insert: {
           arrival_date: string;
@@ -36,6 +40,10 @@ export interface Database {
           note_id: string;
           num_days: number;
           num_people: number;
+          destination?: string;
+          travel_style?: string;
+          budget?: string;
+          interests?: string[];
         };
         Update: {
           arrival_date?: string;
@@ -44,6 +52,10 @@ export interface Database {
           note_id?: string;
           num_days?: number;
           num_people?: number;
+          destination?: string;
+          travel_style?: string;
+          budget?: string;
+          interests?: string[];
         };
         Relationships: [
           {
@@ -174,6 +186,7 @@ export interface Database {
           name: string;
           updated_at: string;
           user_id: string;
+          has_config_note: boolean;
         };
         Insert: {
           created_at?: string;
@@ -182,6 +195,7 @@ export interface Database {
           name: string;
           updated_at?: string;
           user_id: string;
+          has_config_note?: boolean;
         };
         Update: {
           created_at?: string;
@@ -190,12 +204,70 @@ export interface Database {
           name?: string;
           updated_at?: string;
           user_id?: string;
+          has_config_note?: boolean;
         };
         Relationships: [];
       };
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      create_note_with_tags: {
+        Args: {
+          p_project_id: string;
+          p_title: string;
+          p_content: string | null;
+          p_position: number;
+          p_priority: number;
+          p_is_config_note: boolean;
+          p_tags: string[];
+        };
+        Returns: { id: string };
+      };
+      create_config_note: {
+        Args: {
+          p_project_id: string;
+          p_title: string;
+          p_content: string | null;
+          p_priority: number;
+          p_arrival_date: string;
+          p_departure_date: string;
+          p_num_days: number;
+          p_num_people: number;
+          p_tags: string[];
+          p_destination?: string;
+          p_travel_style?: string;
+          p_budget?: string;
+          p_interests?: string[];
+          p_accommodation_address?: string;
+        };
+        Returns: string;
+      };
+      update_config_note: {
+        Args: {
+          p_note_id: string;
+          p_title?: string;
+          p_content?: string | null;
+          p_priority?: number;
+          p_arrival_date?: string;
+          p_departure_date?: string;
+          p_num_days?: number;
+          p_num_people?: number;
+          p_tags?: string[];
+          p_destination?: string;
+          p_travel_style?: string;
+          p_budget?: string;
+          p_interests?: string[];
+          p_accommodation_address?: string;
+        };
+        Returns: Record<string, unknown>;
+      };
+      reorder_notes: {
+        Args: {
+          p_note_positions: { id: string; position: number }[];
+        };
+        Returns: Record<string, unknown>;
+      };
+    };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
   };

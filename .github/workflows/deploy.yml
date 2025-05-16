@@ -1,0 +1,5 @@
+# GitHub Pages workflow disabled – migrated to Vercel
+
+name: deprecated-pages-deploy
+on: [workflow_dispatch]
+jobs: {} 

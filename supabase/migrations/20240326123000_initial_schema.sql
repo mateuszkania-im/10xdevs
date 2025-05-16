@@ -1,4 +1,4 @@
--- Migracja inicjalna dla VibeTravels
+-- Migracja inicjalna dla City Hooper
 -- Tworzy podstawowy schemat bazy danych z tabelami i ograniczeniami
 
 -- Tabela travel_projects

@@ -1,0 +1,23 @@
+---
+import AppShell from "@/layouts/AppShell.astro";
+import PlanCompareView from "@/components/plans/PlanCompareView";
+import { withRouter } from "@/components/providers";
+
+// Aplikowanie HOC do komponentu React
+const RoutedPlanCompareView = withRouter(PlanCompareView);
+
+// Pobieranie parametrów z URL
+const { projectId } = Astro.params;
+
+// Redirect jeśli brak projectId
+if (!projectId) {
+  return Astro.redirect('/404');
+}
+
+// Wyłączenie prerenderowania - strona dynamiczna
+export const prerender = false;
+---
+
+<AppShell activeProjectId={projectId}>
+  <RoutedPlanCompareView client:load projectId={projectId} />
+</AppShell> 

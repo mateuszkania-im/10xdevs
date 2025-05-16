@@ -1,0 +1,58 @@
+---
+import { default as UserMenuComponent } from "./UserMenu";
+import ThemeToggleIsland from "./ThemeToggleIsland";
+---
+
+<header class="sticky top-0 z-10 w-full border-b bg-background">
+  <div class="flex h-14 items-center justify-between px-4">
+    <div class="flex items-center">
+      <a href="/app/projects" class="flex items-center gap-2 font-bold">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-6 w-6"
+        >
+          <path d="M12 3L2 12h3v8h14v-8h3L12 3zm0 13h-2v-8h4v8z"></path>
+        </svg>
+        <span>CityHooper</span>
+      </a>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <ThemeToggleIsland client:load />
+      <button id="mobile-nav-toggle" class="md:hidden">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-6 w-6"
+        >
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+        <span class="sr-only">Menu</span>
+      </button>
+      <UserMenuComponent client:load />
+    </div>
+  </div>
+</header>
+
+<script is:inline>
+  // Logika dla przycisku przełączania nawigacji mobilnej
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleBtn = document.getElementById("mobile-nav-toggle");
+    toggleBtn?.addEventListener("click", () => {
+      document.body.classList.toggle("sidenav-open");
+    });
+  });
+</script>

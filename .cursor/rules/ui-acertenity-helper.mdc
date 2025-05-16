@@ -1,0 +1,116 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Aceternity UI Components — zasady projektu
+
+Ten projekt korzysta z **@aceternity/ui** – kolekcji animowanych komponentów React/Next.js zbudowanych w oparciu o Tailwind CSS i Framer Motion.
+
+---
+
+## Odszukiwanie zainstalowanych komponentów
+
+Wszystkie skopiowane lub zainstalowane przez CLI komponenty trafiają domyślnie do katalogu  
+`src/components/ui` (ew. do podkatalogu, jeśli sam go utworzysz).  
+Importujemy je z aliasem `@/`, skonfigurowanym podczas inicjalizacji projektu:
+
+```tsx
+import { BentoGrid } from "@/components/ui/bento-grid"
+import { Spotlight } from "@/components/ui/spotlight"
+```
+ ([Bento Grid - Aceternity UI](https://ui.aceternity.com/components/bento-grid?utm_source=chatgpt.com))
+
+---
+
+## Wykorzystanie komponentu
+
+```tsx
+<BentoGrid>
+  {/* ...Twoje BentoGridItem-y… */}
+</BentoGrid>
+```
+
+Większość komponentów Aceternity korzysta z pomocniczej funkcji `cn()` do łączenia klas Tailwinda:
+
+```ts
+// lib/utils.ts
+import { clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+```
+ ([Add Utilities - Aceternity UI](https://ui.aceternity.com/docs/add-utilities?utm_source=chatgpt.com))
+
+---
+
+## Instalowanie dodatkowych komponentów
+
+Masz dwie równorzędne ścieżki:
+
+| Sposób | Komenda | Uwagi |
+|--------|---------|-------|
+| **Oficjalne CLI Aceternity** | `npx aceternity-ui@latest add bento-grid` | Najprostsze – dodaje plik źródłowy i zależności. Flagą `--all` pobierzesz całą kolekcję.  ([Aceternity UI CLI - Peerlist](https://peerlist.io/manuarora/project/aceternity-ui-cli?utm_source=chatgpt.com)) |
+| **CLI shadcn** (fallback) | `npx shadcn@latest add https://ui.aceternity.com/registry/bento-grid.json` | Przydatne, jeżeli i tak masz skonfigurowane shadcn CLI.  ([CLI - Aceternity UI](https://ui.aceternity.com/docs/cli?utm_source=chatgpt.com)) |
+
+Po instalacji komponent pojawi się w `src/components/ui/…`, gotowy do importu.
+
+---
+
+## Minimalna konfiguracja projektu
+
+1. **Next.js**  
+   ```bash
+   npx create-next-app@latest
+   # w kreatorze wybierz: Tailwind CSS (Yes) oraz alias "@//*"
+   ```  ([Install Next.js - Aceternity UI](https://ui.aceternity.com/docs/install-nextjs?utm_source=chatgpt.com))
+
+2. **Tailwind CSS**  
+   Wygeneruj plik `tailwind.config.{js,ts}` i dopisz ścieżki do komponentów Aceternity:  
+
+   ```js
+   content: [
+     "./src/app/**/*.{ts,tsx}",
+     "./src/components/**/*.{ts,tsx}",
+   ],
+   ```  ([How to use Aceternity UI for NextJS Projects? | by Its Aman Yadav](https://medium.com/%40itsamanyadav/how-to-use-aceternity-ui-for-nextjs-projects-6c13e4876ce3?utm_source=chatgpt.com))
+
+3. **Dodatkowe zależności i utils**  
+   ```bash
+   npm i motion clsx tailwind-merge
+   ```  
+   oraz `lib/utils.ts` z funkcją `cn()` (patrz wyżej).  ([Add Utilities - Aceternity UI](https://ui.aceternity.com/docs/add-utilities?utm_source=chatgpt.com))
+
+---
+
+## Popularne (darmowe) komponenty Aceternity
+
+- **Bento Grid** – responsywna siatka w stylu Vision OS  
+- **Hero Parallax** – sekcja hero z animacją paralaksy przy scrollu  
+- **Sticky Scroll Reveal** – lewa kolumna przykleja się, prawa ujawnia treść  
+- **Background Beams / Aurora / Gradient Animation** – animowane tła sekcji  
+- **Infinite Moving Cards & 3D Marquee** – karuzele z płynną, nieskończoną animacją  
+- **Spotlight** – efekt “latarki” podążającej za kursorem  
+- **Card Stack** – stos kart automatycznie układających się w czasie  
+- **Animated Tabs** – zakładki z przejściem tła  
+ ([Components - Aceternity UI](https://ui.aceternity.com/components?utm_source=chatgpt.com), [Best Free Parallax Components - Aceternity UI](https://ui.aceternity.com/categories/parallax?utm_source=chatgpt.com), [Best Free Hero Components - Aceternity UI](https://ui.aceternity.com/categories/hero?utm_source=chatgpt.com))
+
+> **Tip:** Pełny katalog (z podziałem na kategorie: Hero, Marquee, Parallax, Section itd.) znajdziesz na stronie [ui.aceternity.com/components](https://ui.aceternity.com/components).
+
+---
+
+## Stylowanie i motywy
+
+Aceternity UI nie narzuca z góry palety kolorów – każdy komponent wykorzystuje klasy Tailwinda, a animacje oparte są na Framer Motion. Dzięki temu:
+
+* dziedziczą motyw z Twojego `tailwind.config`,
+* można je łatwo nadpisać przez `className` lub propsy,
+* dobrze współpracują z pluginami takimi jak `@tailwindcss/typography`.
+
+Jeśli korzystasz z Tailwind v4, pamiętaj że konfiguracja motywu przeniosła się do warstwy CSS (`@theme inline`).  ([Install Tailwind CSS - Aceternity UI](https://ui.aceternity.com/docs/install-tailwindcss?utm_source=chatgpt.com))
+
+---
+
+**Gotowe!** Masz komplet analogicznych zasad dla Aceternity UI – strukturę katalogów, sposób importu komponentów oraz instrukcje CLI-install, tak jak w poprzednim dokumencie dla shadcn.

@@ -1,4 +1,27 @@
+/* Centralne definicje typów dla aplikacji */
+
 import type { Json } from "./db/database.types";
+
+/********************************************
+ * Typy dla formularzy i komponentów UI
+ ********************************************/
+
+export interface NoteEditorVM {
+  title: string;
+  content: string | null;
+  priority?: number;
+  tags: string[];
+  isConfig: boolean;
+  arrival_date?: string;
+  departure_date?: string;
+  num_days?: number;
+  num_people?: number;
+  destination?: string;
+  travel_style?: string;
+  budget?: string;
+  interests?: string[];
+  accommodation_address?: string;
+}
 
 /********************************************
  * Bazowe typy encji z bazy danych
@@ -33,6 +56,11 @@ export interface ConfigData {
   departure_date: string;
   num_days: number;
   num_people: number;
+  destination?: string;
+  travel_style?: string;
+  budget?: string;
+  interests?: string[];
+  accommodation_address?: string;
 }
 
 export interface NoteTag {
@@ -57,12 +85,37 @@ export interface PlanActivity {
   name: string;
   description: string;
   type: string;
+  location?: string;
+  price?: string;
+  price_range?: string;
+  duration?: string;
+  rating?: number;
+  difficulty?: string;
+  mood?: string;
+  notes?: string;
+  tips?: string;
+  website?: string;
+  contact?: string;
+  image_url?: string;
+  tags?: string[];
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export interface PlanDay {
   day_number: number;
   date: string;
   activities: PlanActivity[];
+  weather?: string;
+  summary?: string;
+  temperature?: {
+    min: number;
+    max: number;
+    unit: "C" | "F";
+  };
+  notable_events?: string[];
 }
 
 export interface PlanContent {
@@ -109,6 +162,11 @@ export interface CreateConfigNoteDTO extends CreateNoteDTO {
   departure_date: string;
   num_days: number;
   num_people: number;
+  destination?: string;
+  travel_style?: string;
+  budget?: string;
+  interests?: string[];
+  accommodation_address?: string;
 }
 
 export type UpdateConfigNoteDTO = Partial<CreateConfigNoteDTO>;

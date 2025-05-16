@@ -1,0 +1,7 @@
+# Ignoruj błędy parsowania w plikach Astro
+*.astro
+
+# Standardowe katalogi do ignorowania
+node_modules
+.astro
+dist 

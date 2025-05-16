@@ -1,0 +1,108 @@
+---
+// Definicja typu Step (krok) zgodnie z planem implementacji
+interface Step {
+  number: number;
+  title: string;
+  description: string;
+}
+
+interface Props {
+  steps?: Step[];
+}
+
+// Domyślne kroki procesu
+const defaultSteps: Step[] = [
+  {
+    number: 1,
+    title: "Utwórz projekt podróży",
+    description: "Załóż konto i utwórz nowy projekt podróży, podając nazwę, datę wyjazdu i liczbę osób."
+  },
+  {
+    number: 2,
+    title: "Zapisz swoje preferencje",
+    description: "Dodaj notatki o swoich preferencjach, miejscach, które chcesz odwiedzić, jedzeniu, którego chcesz spróbować, itp."
+  },
+  {
+    number: 3,
+    title: "Wygeneruj plan z AI",
+    description: "Jedno kliknięcie i nasz asystent AI przekształci Twoje notatki w szczegółowy, codzienny harmonogram."
+  },
+  {
+    number: 4,
+    title: "Dostosuj i eksportuj",
+    description: "Edytuj plan według własnych potrzeb, porównuj różne wersje i wyeksportuj gotowy harmonogram."
+  }
+];
+
+// Pobranie kroków z propsów lub użycie domyślnych
+const { steps = defaultSteps } = Astro.props;
+---
+
+<section id="jak-to-dziala" class="py-24">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="flex flex-col items-center justify-center space-y-4 text-center">
+      <div class="space-y-2">
+        <h2 class="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Jak to działa</h2>
+        <p class="max-w-[900px] text-muted-foreground md:text-xl/relaxed">
+          Cztery proste kroki, które zamienią Twoje chaotyczne pomysły w idealny plan podróży.
+        </p>
+      </div>
+    </div>
+    
+    <div class="mx-auto mt-12 max-w-4xl">
+      <div class="relative">
+        <!-- Linia łącząca kroki (timeline) -->
+        <div class="absolute left-0 top-0 mt-8 h-full w-6 border-l-2 border-primary/20 md:left-1/2 md:-ml-1"></div>
+        
+        <!-- Kroki procesu -->
+        <div class="space-y-12">
+          {steps.map((step, index) => (
+            <div class={`relative flex flex-col gap-6 md:flex-row ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+              <!-- Numer kroku (okrągła ikona) -->
+              <div class="z-10 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full bg-primary text-2xl font-bold text-primary-foreground shadow-lg md:absolute md:left-1/2 md:-ml-8">
+                {step.number}
+              </div>
+              
+              <!-- Zawartość kroku -->
+              <div class={`ml-20 flex-1 rounded-lg border bg-background p-6 shadow-md md:ml-0 ${index % 2 === 0 ? 'md:mr-12' : 'md:ml-12'}`}>
+                <h3 class="text-xl font-bold">{step.title}</h3>
+                <p class="mt-2 text-muted-foreground">{step.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+    
+    <!-- Przycisk CTA na dole sekcji -->
+    <div class="mt-16 flex justify-center">
+      <button
+        id="how-it-works-cta"
+        class="inline-flex h-12 items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+      >
+        Wypróbuj teraz
+      </button>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Funkcja do obsługi przycisku CTA - otwarcie modalu autoryzacji
+  function setupHowItWorksCTA() {
+    const ctaButton = document.getElementById('how-it-works-cta');
+    
+    if (ctaButton) {
+      ctaButton.addEventListener('click', () => {
+        // Wysyłamy niestandardowe zdarzenie, które może przechwycić komponent React
+        const event = new CustomEvent('open-auth-modal', { detail: { tab: 'signup' } });
+        document.dispatchEvent(event);
+      });
+    }
+  }
+
+  // Wykonaj setup po załadowaniu strony i po nawigacji z View Transitions
+  document.addEventListener('astro:page-load', setupHowItWorksCTA);
+  
+  // Alternatywnie, jeśli View Transitions nie jest włączone
+  document.addEventListener('DOMContentLoaded', setupHowItWorksCTA);
+</script> 

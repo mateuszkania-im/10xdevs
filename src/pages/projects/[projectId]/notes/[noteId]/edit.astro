@@ -1,0 +1,43 @@
+---
+import MainLayout from "@/layouts/MainLayout.astro";
+import { NoteForm } from "@/components/notes/NoteForm";
+import { ChevronLeftIcon } from "lucide-react";
+import { getNoteById } from "@/lib/services/note.service";
+import { getProjectById } from "@/lib/services/project.service";
+
+const { projectId, noteId } = Astro.params;
+
+if (!projectId || !noteId) {
+  return Astro.redirect("/projects");
+}
+
+const notePromise = getNoteById(projectId, noteId);
+const projectPromise = getProjectById(projectId);
+const [note, project] = await Promise.all([notePromise, projectPromise]);
+
+if (!note || !project) {
+  return Astro.redirect(`/projects/${projectId}/notes`);
+}
+
+const isConfigNote = note.is_config_note;
+const title = isConfigNote 
+  ? `Edycja notatki konfiguracyjnej - ${project.name}` 
+  : `Edycja notatki - ${project.name}`;
+---
+
+<MainLayout title={title}>
+  <div class="container mx-auto py-6">
+    <div class="mb-6">
+      <a href={`/projects/${projectId}/notes/${noteId}`} class="flex items-center gap-1 text-muted-foreground hover:text-foreground">
+        <ChevronLeftIcon className="h-4 w-4" />
+        <span>Powrót do notatki</span>
+      </a>
+      <h1 class="text-3xl font-bold mt-2">{isConfigNote ? "Edycja notatki konfiguracyjnej" : "Edycja notatki"}</h1>
+      <p class="text-muted-foreground">Edytuj notatkę w projekcie {project.name}</p>
+    </div>
+
+    <div class="max-w-2xl">
+      <NoteForm client:load projectId={projectId} noteId={noteId} isConfigNote={isConfigNote} />
+    </div>
+  </div>
+</MainLayout> 

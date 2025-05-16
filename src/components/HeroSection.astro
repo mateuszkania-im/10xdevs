@@ -1,0 +1,120 @@
+---
+// Hero section nie wymaga żadnych propsów zgodnie z planem implementacji
+---
+
+<section class="relative overflow-hidden bg-background py-24 md:py-32">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="grid gap-12 md:grid-cols-2 md:gap-16">
+      <!-- Lewa kolumna z tekstem -->
+      <div class="flex flex-col justify-center space-y-8">
+        <div class="space-y-6">
+          <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+            Plany podróży <span class="text-primary">tworzone przez AI</span>
+          </h1>
+          <p class="max-w-[600px] text-lg text-muted-foreground md:text-xl">
+            Zamień swoje luźne notatki w spersonalizowany plan podróży w kilka sekund. 
+            Oszczędzaj czas na planowaniu i ciesz się podróżą.
+          </p>
+        </div>
+        <div class="flex flex-col gap-4 sm:flex-row">
+          <!-- Główny przycisk CTA -->
+          <button
+            id="hero-cta-button"
+            class="inline-flex h-12 items-center justify-center rounded-md bg-primary px-6 py-3 text-base font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Zacznij za darmo
+          </button>
+          <!-- Przycisk "Dowiedz się więcej" -->
+          <a 
+            href="#jak-to-dziala" 
+            class="inline-flex h-12 items-center justify-center rounded-md border border-input bg-background px-6 py-3 text-base font-medium text-foreground ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+          >
+            Dowiedz się więcej
+          </a>
+        </div>
+      </div>
+      
+      <!-- Prawa kolumna z wizualizacją/animacją przepływu -->
+      <div class="relative flex items-center justify-center">
+        <div class="relative w-full max-w-[500px] overflow-hidden rounded-lg border bg-background/50 shadow-xl">
+          <!-- Uproszczona wizualizacja przepływu "Notatki → AI → Plan" -->
+          <div class="grid grid-cols-1 gap-6 p-8">
+            <!-- Notatki -->
+            <div class="space-y-4 rounded-md border border-border bg-card p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium">Twoje notatki</h3>
+                <span class="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">Krok 1</span>
+              </div>
+              <div class="space-y-2">
+                <p class="text-sm text-muted-foreground">Chcemy zobaczyć Paryż w 3 dni. Musimy odwiedzić Wieżę Eiffla i Luwr. Lubimy dobrą kawę...</p>
+              </div>
+            </div>
+            
+            <!-- Strzałka -->
+            <div class="flex justify-center">
+              <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14"></path>
+                <path d="m19 12-7 7-7-7"></path>
+              </svg>
+            </div>
+            
+            <!-- AI -->
+            <div class="space-y-4 rounded-md border border-primary/30 bg-primary/5 p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-primary">CityHooper AI</h3>
+                <span class="rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">Krok 2</span>
+              </div>
+              <div class="space-y-2">
+                <p class="text-sm text-muted-foreground">Analizuję twoje preferencje, sprawdzam godziny otwarcia, optymalizuję trasę...</p>
+              </div>
+            </div>
+            
+            <!-- Strzałka -->
+            <div class="flex justify-center">
+              <svg class="h-8 w-8 text-primary" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 5v14"></path>
+                <path d="m19 12-7 7-7-7"></path>
+              </svg>
+            </div>
+            
+            <!-- Plan -->
+            <div class="space-y-4 rounded-md border border-green-500/30 bg-green-500/5 p-4">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium text-green-600">Gotowy plan</h3>
+                <span class="rounded-full bg-green-500/10 px-2 py-1 text-xs text-green-600">Krok 3</span>
+              </div>
+              <div class="space-y-2">
+                <p class="text-sm text-muted-foreground">Dzień 1: 09:00 - Śniadanie w Le Cafe, 10:30 - Wieża Eiffla...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Funkcja do obsługi przycisku CTA - otwarcie modalu autoryzacji
+  function setupHeroCTA() {
+    const heroCTAButton = document.getElementById('hero-cta-button');
+    
+    if (heroCTAButton) {
+      heroCTAButton.addEventListener('click', () => {
+        // W przyszłości będzie wywoływać openAuthModal('signup')
+        // Na razie tylko logujemy informację
+        console.log('Otwieram modal autoryzacji z hero...');
+        
+        // Wysyłamy niestandardowe zdarzenie, które może przechwycić komponent React
+        const event = new CustomEvent('open-auth-modal', { detail: { tab: 'signup' } });
+        document.dispatchEvent(event);
+      });
+    }
+  }
+
+  // Wykonaj setup po załadowaniu strony i po nawigacji z View Transitions
+  document.addEventListener('astro:page-load', setupHeroCTA);
+  
+  // Alternatywnie, jeśli View Transitions nie jest włączone
+  document.addEventListener('DOMContentLoaded', setupHeroCTA);
+</script> 

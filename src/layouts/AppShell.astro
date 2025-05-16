@@ -1,0 +1,42 @@
+---
+import TopBar from "@/components/TopBar.astro";
+import ToastProvider from "@/components/ToastProvider";
+import PortalRoot from "@/components/PortalRoot";
+import AuthModalIsland from "@/components/AuthModalIsland";
+import "../styles/global.css";
+
+interface Props {
+  activeProjectId?: string;
+}
+
+const { activeProjectId } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CityHooper</title>
+    <script is:inline>
+      // Obsługa zdarzeń po załadowaniu strony z View Transitions API
+      document.addEventListener("astro:page-load", () => {
+        // Faktyczna implementacja - miejsce na inicjalizację komponentów
+        // po pełnym załadowaniu strony z wykorzystaniem View Transitions API
+      });
+    </script>
+  </head>
+  <body class="min-h-screen bg-background antialiased">
+    <PortalRoot client:load>
+      <ToastProvider client:load>
+        <AuthModalIsland client:only="react" />
+        <div class="flex min-h-screen flex-col">
+          <TopBar />
+          <main class="flex-1 p-6 w-full max-w-7xl mx-auto">
+            <slot />
+          </main>
+        </div>
+      </ToastProvider>
+    </PortalRoot>
+  </body>
+</html>

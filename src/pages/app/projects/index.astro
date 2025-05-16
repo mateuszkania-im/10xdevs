@@ -1,0 +1,14 @@
+---
+import AppShell from "@/layouts/AppShell.astro";
+import ProjectsPageIsland from "@/components/ProjectsPageIsland";
+
+// Użycie prerenderingu false, gdyż strona wymaga danych z API
+export const prerender = false;
+
+// Ustawienie tytułu w meta tagach
+const title = "Twoje projekty podróży";
+---
+
+<AppShell>
+  <ProjectsPageIsland client:load />
+</AppShell>

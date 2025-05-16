@@ -1,0 +1,11 @@
+---
+import StatusPageLayout from "@/layouts/StatusPageLayout.astro";
+---
+
+<StatusPageLayout
+  statusCode={401}
+  title="Brak dostępu"
+  message="Musisz się zalogować, aby uzyskać dostęp do tej części aplikacji."
+>
+  <a href="/" class="underline text-primary">Przejdź do strony logowania</a>
+</StatusPageLayout> 
